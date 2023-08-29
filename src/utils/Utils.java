@@ -1,3 +1,4 @@
+package utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,5 +77,34 @@ public class Utils {
             }
         }
         return pageRangeArr;
+    }
+
+    public static int getHalfWidthCount(String value) {
+        int count = 0;
+        String str = (value == null) ? "" : value;
+        for (int i = 0; i < str.length(); i++) {
+            char character = str.charAt(i);
+            if (isHalfWidth(character))
+                count++;
+        }
+        return count;
+    }
+
+    public static int getFullWidthCount(String value) {
+        int count = 0;
+        String str = (value == null) ? "" : value;
+        int length = str.length();
+        for(int i = 0; i < length; i++) {
+            char character = str.charAt(i);
+            if(!isHalfWidth(character))
+                count++;
+        }
+        return count;
+    }
+
+    public static boolean isHalfWidth(char c) {
+        return '\u0000' <= c && c <= '\u00FF'
+                || '\uFF61' <= c && c <= '\uFFDC'
+                || '\uFFE8' <= c && c <= '\uFFEE';
     }
 }

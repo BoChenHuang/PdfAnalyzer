@@ -3,13 +3,78 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextObject {
+    private String str;
+    private float x;
+    private float y;
+    private int length;
+    private int fullWidthCount;
+    private int halfWidthCount;
     private List<Float> widthArr;
     private List<Float> heightArr;
     private List<FontObject> fontArr;
+    private int lineIndex;
+
 
     public TextObject() {
         this.widthArr = new ArrayList<>();
         this.heightArr = new ArrayList<>();
+        this.fontArr = new ArrayList<>();
+    }
+
+    public int getLineIndex() {
+        return lineIndex;
+    }
+
+    public void setLineIndex(int lineIndex) {
+        this.lineIndex = lineIndex;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public int getHalfWidthCount() {
+        return halfWidthCount;
+    }
+
+    public void setHalfWidthCount(int halfWidthCount) {
+        this.halfWidthCount = halfWidthCount;
+    }
+
+    public int getFullWidthCount() {
+        return fullWidthCount;
+    }
+
+    public void setFullWidthCount(int fullWidthCount) {
+        this.fullWidthCount = fullWidthCount;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
     }
 
     public List<Float> getWidthArr() {
@@ -34,7 +99,7 @@ public class TextObject {
         this.heightArr = height;
     }
 
-    public void addToHeight(float height) {
+    public void addToHeightArr(float height) {
         if ( this.heightArr != null) {
             this.heightArr.add(height);
         }

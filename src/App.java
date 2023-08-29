@@ -10,9 +10,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
+import object_stripper.TextStripper;
 import pdf_document.DocumentObject;
 import pdf_document.MetadataObject;
 import pdf_document.PageObject;
+import utils.Utils;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -46,6 +48,7 @@ public class App {
             // set page range
             String pageRange = cmd.getOptionValue("range");
             ArrayList<Integer> pageRangeArr = Utils.getPageRange(pageRange, pageNum);
+            TextStripper textStripper = new TextStripper(pdfFile);
 
             //parse page
             for(int i : pageRangeArr) {
@@ -55,7 +58,9 @@ public class App {
                 pageObject.setWidth(page.getMediaBox().getWidth());
                 pageObject.setHeight(page.getMediaBox().getHeight());
 
-                //TODO stripe image and text
+                textStripper.processPage(i);
+                pageObject.setTextObjects(textStripper.getTextObjectsListOfPage());
+                //TODO stripe image
             }
 
             //TODO out json file
