@@ -3,7 +3,7 @@
 
 ## Usage
 ```
-java -jar PdfAnalyzer <pdf file path> -range <page range> -output <output file path>
+java -jar PdfAnalyzer.jar <pdf file path> -range <page range> -output <output file path>
 ```
 * pdf file path: 要解析的pdf 檔案路徑。
 * page range: 欲解析的頁碼範圍，可為單頁或一段範圍 ex: 1, 3-4，若有多段請使用 , 隔開。
