@@ -91,7 +91,7 @@ public class App {
             System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e);
+            System.err.println(e);
             System.exit(1);
         }
     }
