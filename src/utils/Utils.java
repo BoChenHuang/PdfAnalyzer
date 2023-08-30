@@ -1,10 +1,18 @@
 package utils;
+
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.common.PDMetadata;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.xmpbox.XMPMetadata;
 import org.apache.xmpbox.schema.AdobePDFSchema;
 import org.apache.xmpbox.schema.DublinCoreSchema;
@@ -19,15 +27,24 @@ public class Utils {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         if (info != null) {
-            metadataObject.setTitle(info.getTitle());
-            metadataObject.setAuthor(info.getAuthor());
-            metadataObject.addToSubjects(info.getSubject());
-            metadataObject.setKeywords(info.getKeywords());
-            metadataObject.addToCreators(info.getCreator());
-            metadataObject.setProducer(info.getProducer());
-            metadataObject.setCreateDate(dateFormat.format(info.getCreationDate().getTime()));
-            metadataObject.setModifyDate(dateFormat.format(info.getModificationDate().getTime()));
-            metadataObject.setTrapped(info.getTrapped());
+            if (info.getTitle() != null)
+                metadataObject.setTitle(info.getTitle());
+            if (info.getAuthor() != null)
+                metadataObject.setAuthor(info.getAuthor());
+            if (info.getSubject() != null)
+                metadataObject.addToSubjects(info.getSubject());
+            if (info.getKeywords() != null)
+                metadataObject.setKeywords(info.getKeywords());
+            if (info.getCreator() != null)
+                metadataObject.addToCreators(info.getCreator());
+            if (info.getProducer() != null)
+                metadataObject.setProducer(info.getProducer());
+            if (info.getCreationDate() != null)
+                metadataObject.setCreateDate(dateFormat.format(info.getCreationDate().getTime()));
+            if (info.getModificationDate() != null)
+                metadataObject.setModifyDate(dateFormat.format(info.getModificationDate().getTime()));
+            if (info.getTrapped() != null)
+                metadataObject.setTrapped(info.getTrapped());
         }
 
         if (meta != null) {
@@ -38,25 +55,37 @@ public class Utils {
             DublinCoreSchema dc = metadata.getDublinCoreSchema();
 
             if (basic != null) {
-                metadataObject.setCreateDate(dateFormat.format(basic.getCreateDate().getTime()));
-                metadataObject.setModifyDate(dateFormat.format(basic.getModifyDate().getTime()));
-                metadataObject.setCreatorTool(basic.getCreatorTool());
+                if (basic.getCreateDate() != null)
+                    metadataObject.setCreateDate(dateFormat.format(basic.getCreateDate().getTime()));
+                if (basic.getModifyDate() != null)
+                    metadataObject.setModifyDate(dateFormat.format(basic.getModifyDate().getTime()));
+                if (basic.getCreatorTool() != null)
+                    metadataObject.setCreatorTool(basic.getCreatorTool());
             }
 
             if (pdf != null) {
-                metadataObject.setKeywords(pdf.getKeywords());
-                metadataObject.setVersion(pdf.getPDFVersion());
-                metadataObject.setProducer(pdf.getProducer());
+                if (pdf.getKeywords() != null)
+                    metadataObject.setKeywords(pdf.getKeywords());
+                if (pdf.getPDFVersion() != null)
+                    metadataObject.setVersion(pdf.getPDFVersion());
+                if (pdf.getProducer() != null)
+                    metadataObject.setProducer(pdf.getProducer());
             }
 
             if (dc != null) {
-                metadataObject.setTitle(dc.getTitle());
-                metadataObject.setDescription(dc.getDescription());
-                metadataObject.setCreators(dc.getCreators());
-                metadataObject.setDates(dc.getDates());
-                metadataObject.setSubjects(dc.getSubjects());
+                if (dc.getTitle() != null)
+                    metadataObject.setTitle(dc.getTitle());
+                if (dc.getDescription() != null)
+                    metadataObject.setDescription(dc.getDescription());
+                if (dc.getCreators() != null)
+                    metadataObject.setCreators(dc.getCreators());
+                if (dc.getDates() != null)
+                    metadataObject.setDates(dc.getDates());
+                if (dc.getSubjects() != null)
+                    metadataObject.setSubjects(dc.getSubjects());
             }
         }
+
         return metadataObject;
     }
 
@@ -94,9 +123,9 @@ public class Utils {
         int count = 0;
         String str = (value == null) ? "" : value;
         int length = str.length();
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             char character = str.charAt(i);
-            if(!isHalfWidth(character))
+            if (!isHalfWidth(character))
                 count++;
         }
         return count;
@@ -106,5 +135,33 @@ public class Utils {
         return '\u0000' <= c && c <= '\u00FF'
                 || '\uFF61' <= c && c <= '\uFFDC'
                 || '\uFFE8' <= c && c <= '\uFFEE';
+    }
+
+    public static String getHex(byte[] bytes) throws Exception {
+        String hexString = "";
+        int length = bytes.length;
+        for (int i = 0; i < length; i++) {
+            hexString += Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1);
+        }
+        return hexString;
+    }
+
+    public static String getMd5(PDImageXObject image) throws Exception {
+        BufferedImage buffImg = image.getImage();
+        String suffix = image.getSuffix();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        if (!ImageIO.write(buffImg, suffix, outputStream)) {
+            BufferedImage newBufferedImage = new BufferedImage(buffImg.getWidth(), buffImg.getHeight(),
+                    BufferedImage.TYPE_INT_RGB);
+            newBufferedImage.createGraphics().drawImage(buffImg, 0, 0, Color.WHITE, null);
+            ImageIO.write(newBufferedImage, suffix, outputStream);
+        }
+        byte[] data = outputStream.toByteArray();
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(data);
+        byte[] hash = md.digest();
+
+        String md5 = getHex(hash);
+        return md5;
     }
 }

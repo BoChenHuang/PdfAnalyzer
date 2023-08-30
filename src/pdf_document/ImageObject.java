@@ -10,10 +10,10 @@ public class ImageObject {
     private double displayHeight;
     private double x;
     private double y;
-    private String format;
+    private String suffix;
 
     public ImageObject(int index, String name, int page, double width, double height, double displayWidth,
-            double displayHeight, double x, double y, String format) {
+            double displayHeight, double x, double y, String suffix) {
         this.index = index;
         this.name = name;
         this.page = page;
@@ -23,15 +23,15 @@ public class ImageObject {
         this.displayHeight = displayHeight;
         this.x = x;
         this.y = y;
-        this.format = format;
+        this.suffix = suffix;
     }
 
-    public String getFormat() {
-        return format;
+    public String getSuffix() {
+        return suffix;
     }
 
-    public void setFormat(String format) {
-        this.format = format;
+    public void setSuffix(String format) {
+        this.suffix = format;
     }
 
     public double getY() {

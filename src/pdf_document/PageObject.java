@@ -13,6 +13,9 @@ public class PageObject {
 
     public PageObject(int index) {
         this.index = index;
+        this.totalTextCount = 0;
+        this.fullWidthCount = 0;
+        this.halfWidthCount = 0;
     }
 
     public int getIndex() {
@@ -57,11 +60,19 @@ public class PageObject {
 
     public void setTextObjects(List<TextObject> textObjects) {
         this.textObjects = textObjects;
+        for(TextObject textObject : this.textObjects) {
+            this.fullWidthCount += textObject.getFullWidthCount();
+            this.halfWidthCount += textObject.getHalfWidthCount();
+            this.totalTextCount = this.fullWidthCount + this.halfWidthCount;
+        }
     }
 
     public void addToTextObjects(TextObject textObject) {
         if (this.textObjects != null) {
             this.textObjects.add(textObject);
+            this.fullWidthCount += textObject.getFullWidthCount();
+            this.halfWidthCount += textObject.getHalfWidthCount();
+            this.totalTextCount = this.fullWidthCount + this.halfWidthCount;
         }
     }
 

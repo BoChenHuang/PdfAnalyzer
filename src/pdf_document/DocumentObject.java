@@ -5,7 +5,7 @@ import java.util.List;
 public class DocumentObject {
     private String name;
     private MetadataObject metadata;
-    private List<Object> pages;
+    private List<PageObject> pages;
     private Integer numberOfPages;
 
     public DocumentObject() {
@@ -30,12 +30,16 @@ public class DocumentObject {
         this.metadata = metadata;
     }
 
-    public void setPaggs(List<Object> pages) {
+    public void setPaggs(List<PageObject> pages) {
         this.pages = pages;
     }
 
-    public List<Object> getPages() {
+    public List<PageObject> getPages() {
         return pages;
+    }
+
+    public void addPage(PageObject page) {
+        this.pages.add(page);
     }
 
     public Integer getNumberOfPages() {
