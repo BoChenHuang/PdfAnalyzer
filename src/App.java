@@ -34,7 +34,6 @@ public class App {
             CommandLine cmd = cmdParser.parse(opts, args);
 
             String outputPath = cmd.getOptionValue("output");
-            Boolean hasOutputPath = outputPath == null ? true : false;
 
             // Pdf file loading
             File input = new File(args[0]);
